@@ -1,4 +1,7 @@
 import numpy as np
+import time
+
+start = time.time()
 
 size1 = 8
 size2 = 10
@@ -14,5 +17,8 @@ for s1 in range(size1):
         count += 1
 
 print(A)
+
+end = time.time()
+print(end - start)
 
 # works on pi 14/11/2024
