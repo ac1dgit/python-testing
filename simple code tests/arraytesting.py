@@ -14,3 +14,5 @@ for s1 in range(size1):
         count += 1
 
 print(A)
+
+# works on pi 14/11/2024
