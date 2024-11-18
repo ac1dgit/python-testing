@@ -17,7 +17,7 @@
 >`conda --version`
 ## create conda env python 3.9 in vscode
 >`pip install "numpy<2.0.0"`\
->`pip install tensorflow`
+>`pip install "tensorflow<2.15"`
 
 ## lgpio stuff
 >`pip install spidev`\
