@@ -8,7 +8,7 @@ ADC = ADS1256.ADS1256()
 ADC.ADS1256_init()
 ADC.ADS1256_ConfigADC(0,0xB2)
 
-samples = 100
+samples = 3000
 data = np.zeros((samples,2))
 
 time_start = time.time_ns()
