@@ -16,7 +16,7 @@ for i in range(samples):
     data[i,:] = [(time.time_ns()-time_start)/np.power(10,6),ADC.ADS1256_GetChannalValue(0)*5.0/0x7fffff]
 time_stop = time.time_ns()
 
-np.savetxt('testsave.txt', data)
+np.save('testsave.npy', data)
 print(data)
 
 elapsed_time = time_stop-time_start
