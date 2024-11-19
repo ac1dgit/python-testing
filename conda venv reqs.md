@@ -3,7 +3,8 @@
 >`python.exe -m pip install --upgrade pip`\
 >`pip install --upgrade setuptools`\
 >`pip install "numpy<2.0.0"`\
->`pip install "tensorflow<2.11"`
+>`pip install "tensorflow<2.11"`\
+>`pip install "matplotlib"`
 
 ## confirm tensor
 >`python -c "import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))"`
@@ -17,7 +18,8 @@
 >`conda --version`
 ## create conda env python 3.9 in vscode
 >`pip install "numpy<2.0.0"`\
->`pip install "tensorflow<2.15"`
+>`pip install "tensorflow<2.15"`\
+>`pip install "matplotlib"`
 
 ## lgpio stuff
 >`pip install spidev`\
