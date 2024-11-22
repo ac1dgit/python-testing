@@ -8,12 +8,20 @@ ADC = ADS1256.ADS1256()
 ADC.ADS1256_init()
 ADC.ADS1256_ConfigADC(0,0xF0)
 
+hztarget = 2000
+
 samples = 10000
 data = np.zeros((samples,2))
 
+t=time.time()
+period=1/hztarget
+
 time_start = time.time_ns()
+
 for i in range(samples):
+    t+=period
     data[i,:] = [(time.time_ns()-time_start)/np.power(10,6),ADC.ADS1256_GetChannalValue(0)*5.0/0x7fffff]
+    time.sleep(max(0,t-time.time()))
 time_stop = time.time_ns()
 
 np.save('testsave.npy', data)
