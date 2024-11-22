@@ -20,7 +20,7 @@ time_start = time.time_ns()
 
 for i in range(samples):
     t+=period
-    data[i,:] = [(time.time_ns()-time_start)/np.power(10,6),ADC.ADS1256_GetChannalValue(0)*5.0/0x7fffff]
+    data[i,:] = [time.time_ns(),ADC.ADS1256_GetChannalValue(0)*5.0/0x7fffff]
     time.sleep(max(0,t-time.time()))
 time_stop = time.time_ns()
 
