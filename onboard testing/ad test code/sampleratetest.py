@@ -1,6 +1,5 @@
 import time
 import numpy as np
-import matplotlib.pyplot as plt
 import ADS1256
 import RPi.GPIO as GPIO
 
