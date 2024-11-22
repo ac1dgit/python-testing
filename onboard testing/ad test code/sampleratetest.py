@@ -10,7 +10,7 @@ ADC.ADS1256_ConfigADC(0,0xF0)
 
 hztarget = 2000
 
-samples = 10000
+samples = 20000
 data = np.zeros((samples,2))
 
 t=time.time()
@@ -20,7 +20,7 @@ time_start = time.time_ns()
 
 for i in range(samples):
     t+=period
-    data[i,:] = [time.time_ns(),ADC.ADS1256_GetChannalValue(0)*5.0/0x7fffff]
+    data[i,:] = [time.time_ns(),ADC.ADS1256_GetChannalValue(7)*5.0/0x7fffff]
     time.sleep(max(0,t-time.time()))
 time_stop = time.time_ns()
 
