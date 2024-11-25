@@ -3,10 +3,9 @@ import numpy as np
 data = np.load('testsave.npy')
 timeseries = data[:,0]
 
-timeseries = np.delete(timeseries, range(2000))
+timeseries = np.delete(timeseries, range(2500))
 
 samplesize = np.size(timeseries)
-print(samplesize)
 
 elapsed_time = (timeseries[samplesize-1] - timeseries[0])/np.power(10,6)
 hzperf = samplesize/elapsed_time
