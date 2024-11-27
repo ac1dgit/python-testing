@@ -25,7 +25,7 @@ ADC.ADS1256_ConfigADC(0,0xF0)
 
 hztarget = 1000
 
-samples = 300
+samples = 5000
 data = np.zeros((samples,3))
 
 t=time.time()
