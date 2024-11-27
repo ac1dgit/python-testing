@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 data = np.load('testsave.npy')
 print(data)
 
-xpoints = data[:,0]
-ypoints = data[:,1]
-print(xpoints)
-plt.plot(xpoints, ypoints)
+timeseries = data[:,0]
+ad0_data = data[:,1]
+ad1_data = data[:,2]
+print(timeseries)
+plt.plot(timeseries, ad0_data, color='r', label='ad 0')
+plt.plot(timeseries, ad1_data, color='b', label='ad 1')
 plt.show()
