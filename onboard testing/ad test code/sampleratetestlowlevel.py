@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 import spidev
 
 # Pin definition
+SPI = spidev.SpiDev(0, 0)
 RST_PIN = 18
 CS_PIN = 22
 DRDY_PIN = 17
@@ -32,10 +33,10 @@ for i in range(0,400000,1):
     if(i >= 400000):
         print ("Time Out ...\r\n")
 
-GPIO.input(CS_PIN, GPIO.LOW)
+GPIO.output(CS_PIN, GPIO.LOW)
 SPI.writebytes([0x10 | 0, 0x00])
 id = SPI.readbytes(1)
-GPIO.input(self.cs_pin, GPIO.HIGH)
+GPIO.output(CS_PIN, GPIO.HIGH)
 id = id[0] >> 4
 if id == 3 :
     print("ID Read success  ")
@@ -110,7 +111,7 @@ for i in range(samples):
 time_stop = time.time_ns()
 
 # Saving data table
-np.save('testsave.npy', data)
+np.save('lowleveltestsave.npy', data)
 print(data)
 
 # Result output
