@@ -63,30 +63,33 @@ GPIO.output(CS_PIN, GPIO.HIGH)
 time.sleep(1 // 1000.0)
 
 # Data collection prep
-hztarget = 500
-samples = 500
+hztarget = 5000
+samples = 1000
 data = np.zeros((samples,2))
 t=time.time()
 period=1/hztarget
 time_start = time.time_ns()
 
+ # Channel select
+channel = 0
+GPIO.output(CS_PIN, GPIO.LOW)
+SPI.writebytes([0x50 | 1, 0x00, (channel<<4) | (1<<3)])
+GPIO.output(CS_PIN, GPIO.HIGH)
+
+# CMD sync
+GPIO.output(CS_PIN, GPIO.LOW)
+SPI.writebytes([0xFC])
+GPIO.output(CS_PIN, GPIO.HIGH)
+
+# CMD wakeup
+GPIO.output(CS_PIN, GPIO.LOW)
+SPI.writebytes([0x00])
+GPIO.output(CS_PIN, GPIO.HIGH)
+
 # Data collection
 for s in range(samples):
-    # Channel select
-    channel = 0
-    GPIO.output(CS_PIN, GPIO.LOW)
-    SPI.writebytes([0x50 | 1, 0x00, (channel<<4) | (1<<3)])
-    GPIO.output(CS_PIN, GPIO.HIGH)
-
-    # CMD sync
-    GPIO.output(CS_PIN, GPIO.LOW)
-    SPI.writebytes([0xFC])
-    GPIO.output(CS_PIN, GPIO.HIGH)
-
-    # CMD wakeup
-    GPIO.output(CS_PIN, GPIO.LOW)
-    SPI.writebytes([0x00])
-    GPIO.output(CS_PIN, GPIO.HIGH)
+    # Cycle time logging
+    t+=period
 
     # DRDY WAIT
     for i in range(0,400000,1):
@@ -94,7 +97,6 @@ for s in range(samples):
             break
         if(i >= 400000):
             print ("Time Out ...\r\n")
-
     # Get value
     GPIO.output(CS_PIN, GPIO.LOW)
     SPI.writebytes([0x01])
@@ -108,6 +110,9 @@ for s in range(samples):
    
     # Save value
     data[s,:] = [time.time_ns(),value*5.0/0x7fffff]
+
+    # Cycle time align
+    time.sleep(max(0,t-time.time()))
 time_stop = time.time_ns()
 
 # Saving data table
@@ -118,5 +123,5 @@ print(data)
 elapsed_time = time_stop-time_start
 time_s = elapsed_time/np.power(10,9)
 hz = samples/time_s
-print(time_s)
-print(hz)
+print("test duration (s):",time_s)
+print("sampling rate (hz): ",hz)
