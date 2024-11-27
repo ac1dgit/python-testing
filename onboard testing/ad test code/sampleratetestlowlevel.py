@@ -16,7 +16,7 @@ GPIO.setup(RST_PIN, GPIO.OUT)
 GPIO.setup(CS_PIN, GPIO.OUT)
 #GPIO.setup(DRDY_PIN, GPIO.IN)
 GPIO.setup(DRDY_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-SPI.max_speed_hz = 2000000 #default is 20000
+SPI.max_speed_hz = int(2.5*np.power(10,6)) #default is 20000
 SPI.mode = 0b01 # default is 0b01
 
 # ADS reset
@@ -51,7 +51,7 @@ for i in range(0,400000,1):
         print ("Time Out ...\r\n")
 buf = [0,0,0,0,0,0,0,0]
 gain = 0
-drate = 0xF0
+drate = 0xB0
 buf[0] = (0<<3) | (1<<2) | (0<<1)
 buf[1] = 0x08
 buf[2] = (0<<5) | (0<<3) | (gain<<0)
@@ -63,11 +63,8 @@ GPIO.output(CS_PIN, GPIO.HIGH)
 time.sleep(1 // 1000.0)
 
 # Data collection prep
-hztarget = 5000
-samples = 25000
+samples = 2000
 data = np.zeros((samples,2))
-t=time.time()
-period=1/hztarget
 time_start = time.time_ns()
 
  # Channel select
@@ -88,9 +85,6 @@ GPIO.output(CS_PIN, GPIO.HIGH)
 
 # Data collection
 for s in range(samples):
-    # Cycle time logging
-    t+=period
-
     # DRDY WAIT
     for i in range(0,400000,1):
         if(GPIO.input(DRDY_PIN) == 0):
@@ -110,9 +104,6 @@ for s in range(samples):
    
     # Save value
     data[s,:] = [time.time_ns(),value*5.0/0x7fffff]
-
-    # Cycle time align
-    time.sleep(max(0,t-time.time()))
 time_stop = time.time_ns()
 
 # Saving data table
