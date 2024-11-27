@@ -71,7 +71,7 @@ period=1/hztarget
 time_start = time.time_ns()
 
 # Data collection
-for i in range(samples):
+for s in range(samples):
     # Channel select
     channel = 0
     GPIO.output(CS_PIN, GPIO.LOW)
@@ -107,7 +107,7 @@ for i in range(samples):
         value &= 0xF000000
    
     # Save value
-    data[i,:] = [time.time_ns(),value*5.0/0x7fffff]
+    data[s,:] = [time.time_ns(),value*5.0/0x7fffff]
 time_stop = time.time_ns()
 
 # Saving data table
