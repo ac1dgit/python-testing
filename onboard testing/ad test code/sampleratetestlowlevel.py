@@ -63,12 +63,12 @@ GPIO.output(CS_PIN, GPIO.HIGH)
 time.sleep(1 // 1000.0)
 
 # Data collection prep
-samples = 2000
+samples = 10000
 data = np.zeros((samples,2))
 time_start = time.time_ns()
 
  # Channel select
-channel = 7
+channel = 0
 GPIO.output(CS_PIN, GPIO.LOW)
 SPI.writebytes([0x50 | 1, 0x00, (channel<<4) | (1<<3)])
 GPIO.output(CS_PIN, GPIO.HIGH)
