@@ -64,14 +64,14 @@ time.sleep(1 // 1000.0)
 
 # Data collection prep
 hztarget = 5000
-samples = 1000
+samples = 25000
 data = np.zeros((samples,2))
 t=time.time()
 period=1/hztarget
 time_start = time.time_ns()
 
  # Channel select
-channel = 0
+channel = 7
 GPIO.output(CS_PIN, GPIO.LOW)
 SPI.writebytes([0x50 | 1, 0x00, (channel<<4) | (1<<3)])
 GPIO.output(CS_PIN, GPIO.HIGH)
