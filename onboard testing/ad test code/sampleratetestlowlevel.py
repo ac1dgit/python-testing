@@ -75,7 +75,7 @@ for s in range(samples):
     # Channel select
     channel = 0
     GPIO.output(CS_PIN, GPIO.LOW)
-    SPI.writebytes([0x50 | 0x50, 0x00, (channel<<4) | (1<<3)])
+    SPI.writebytes([0x50 | 1, 0x00, (channel<<4) | (1<<3)])
     GPIO.output(CS_PIN, GPIO.HIGH)
 
     # CMD sync
