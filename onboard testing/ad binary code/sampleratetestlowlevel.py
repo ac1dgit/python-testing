@@ -15,7 +15,6 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(RST_PIN, GPIO.OUT)
 GPIO.setup(CS_PIN, GPIO.OUT)
-#GPIO.setup(DRDY_PIN, GPIO.IN)
 GPIO.setup(DRDY_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 SPI.max_speed_hz = int(2.5*np.power(10,6)) #default is 20000
 SPI.mode = 0b01 # default is 0b01
@@ -35,7 +34,7 @@ for i in range(0,400000,1):
         print ("Time Out ...\r\n")
 
 GPIO.output(CS_PIN, GPIO.LOW)
-SPI.writebytes([0x10 | 0, 0x00])
+SPI.writebytes([hex.CMD['RREG'] | hex.REG_DEF['STATUS'], 0x00])
 id = SPI.readbytes(1)
 GPIO.output(CS_PIN, GPIO.HIGH)
 id = id[0] >> 4
@@ -51,14 +50,14 @@ for i in range(0,400000,1):
     if(i >= 400000):
         print ("Time Out ...\r\n")
 buf = [0,0,0,0,0,0,0,0]
-gain = 0
-drate = 0xB0
+gain = hex.GAIN['1']
+drate = hex.DATA_RATE['2000SPS']
 buf[0] = (0<<3) | (1<<2) | (0<<1)
 buf[1] = 0x08
 buf[2] = (0<<5) | (0<<3) | (gain<<0)
 buf[3] = drate
 GPIO.output(CS_PIN, GPIO.LOW)
-SPI.writebytes([0x50 | 0, 0x03])
+SPI.writebytes([hex.CMD['WREG'] | 0, 0x03])
 SPI.writebytes(buf)
 GPIO.output(CS_PIN, GPIO.HIGH)
 time.sleep(1 // 1000.0)
@@ -69,19 +68,19 @@ data = np.zeros((samples,2))
 time_start = time.time_ns()
 
  # Channel select
-channel = 0
+channel = 1
 GPIO.output(CS_PIN, GPIO.LOW)
-SPI.writebytes([0x50 | 1, 0x00, (channel<<4) | (1<<3)])
+SPI.writebytes([hex.CMD['WREG'] | hex.REG_DEF['MUX'], 0x00, (channel<<4) | (1<<3)])
 GPIO.output(CS_PIN, GPIO.HIGH)
 
 # CMD sync
 GPIO.output(CS_PIN, GPIO.LOW)
-SPI.writebytes([0xFC])
+SPI.writebytes([hex.CMD['SYNC']])
 GPIO.output(CS_PIN, GPIO.HIGH)
 
 # CMD wakeup
 GPIO.output(CS_PIN, GPIO.LOW)
-SPI.writebytes([0x00])
+SPI.writebytes([hex.CMD['WAKEUP']])
 GPIO.output(CS_PIN, GPIO.HIGH)
 
 # Data collection
@@ -94,7 +93,7 @@ for s in range(samples):
             print ("Time Out ...\r\n")
     # Get value
     GPIO.output(CS_PIN, GPIO.LOW)
-    SPI.writebytes([0x01])
+    SPI.writebytes([hex.CMD['RDATA']])
     buf = SPI.readbytes(3)
     GPIO.output(CS_PIN, GPIO.HIGH)
     value = (buf[0]<<16) & 0xff0000
@@ -108,7 +107,7 @@ for s in range(samples):
 time_stop = time.time_ns()
 
 # Saving data table
-np.save('lowleveltestsave.npy', data)
+np.save('onboard testing/ad binary code/lowleveltestsave.npy', data)
 print(data)
 
 # Result output
