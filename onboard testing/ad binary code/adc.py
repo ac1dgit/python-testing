@@ -1,3 +1,5 @@
+import RPi.GPIO as GPIO
+
 # gain channel
 GAIN = {'1' : 0, # GAIN   1
         '2' : 1, # GAIN   2
@@ -57,3 +59,10 @@ CMD = {'WAKEUP' : 0x00,     # Completes SYNC and Exits Standby Mode 0000  0000 (
        'STANDBY' : 0xFD,    # Begin Standby Mode 1111   1101 (FDh)
        'RESET' : 0xFE,      # Reset to Power-Up Values 1111   1110 (FEh)
       }
+
+def wait_drdy(DRDY_PIN):
+    for i in range(0,400000,1):
+        if(GPIO.input(DRDY_PIN) == 0):
+         break
+    if(i >= 400000):
+        print ("Time Out ...\r\n")
