@@ -1,6 +1,6 @@
 import numpy as np
 
-data = np.load('testsave.npy')
+data = np.load('onboard testing/ad binary code/lowleveltestsave.npy')
 timeseries = data[:,0]
 
 timeseries = np.delete(timeseries, range(2500))
