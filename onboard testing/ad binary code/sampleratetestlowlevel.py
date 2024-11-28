@@ -5,10 +5,11 @@ import spidev
 import adc
 
 # Parameters
-spi_speed_mhz = 2.5
+spi_speed_mhz = 2.5 #chip default is 20 khz
 gain = adc.GAIN['1']
-sample_rate = adc.DATA_RATE['2000SPS']
-samples = 10000
+sample_rate = adc.DATA_RATE['3750SPS']
+samples = 5000
+channel_count = 4
 
 # Pin definition
 SPI = spidev.SpiDev(0, 0)
@@ -22,14 +23,12 @@ GPIO.setwarnings(False)
 GPIO.setup(RST_PIN, GPIO.OUT)
 GPIO.setup(CS_PIN, GPIO.OUT)
 GPIO.setup(DRDY_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-SPI.max_speed_hz = int(spi_speed_mhz*np.power(10,6)) #default is 20000
-SPI.mode = 0b01 # default is 0b01
+SPI.max_speed_hz = int(spi_speed_mhz*np.power(10,6))
+SPI.mode = 0b01
 
 # ADS reset
 GPIO.output(RST_PIN, GPIO.HIGH)
-time.sleep(200 // 1000.0)
 GPIO.output(RST_PIN, GPIO.LOW)
-time.sleep(200 // 1000.0)
 GPIO.output(RST_PIN, GPIO.HIGH)
 
 # ID read check
@@ -57,43 +56,41 @@ GPIO.output(CS_PIN, GPIO.LOW)
 SPI.writebytes([adc.CMD['WREG'] | 0, 0x03])
 SPI.writebytes(buf)
 GPIO.output(CS_PIN, GPIO.HIGH)
-time.sleep(1 // 1000.0)
-
-# Channel select
-channel = 1
-GPIO.output(CS_PIN, GPIO.LOW)
-SPI.writebytes([adc.CMD['WREG'] | adc.REG_DEF['MUX'], 0x00, (channel<<4) | (1<<3)])
-GPIO.output(CS_PIN, GPIO.HIGH)
 
 # CMD sync
 GPIO.output(CS_PIN, GPIO.LOW)
 SPI.writebytes([adc.CMD['SYNC']])
 GPIO.output(CS_PIN, GPIO.HIGH)
 
-# CMD wakeup
-GPIO.output(CS_PIN, GPIO.LOW)
-SPI.writebytes([adc.CMD['WAKEUP']])
-GPIO.output(CS_PIN, GPIO.HIGH)
-
 # Data collection
-data = np.zeros((samples,2))
+data = np.zeros((samples,channel_count + 1))
+tempvalues = np.zeros((channel_count,1))
 time_start = time.time_ns()
 for s in range(samples):
-    # Get value
-    adc.wait_drdy(DRDY_PIN)
+    for c in range(channel_count):
+        # Channel select
+        channel = c
+        GPIO.output(CS_PIN, GPIO.LOW)
+        SPI.writebytes([adc.CMD['WREG'] | adc.REG_DEF['MUX'], 0x00, (channel<<4) | (1<<3)])
+        GPIO.output(CS_PIN, GPIO.HIGH)
 
-    GPIO.output(CS_PIN, GPIO.LOW)
-    SPI.writebytes([adc.CMD['RDATA']])
-    buf = SPI.readbytes(3)
-    GPIO.output(CS_PIN, GPIO.HIGH)
-    value = (buf[0]<<16) & 0xff0000
-    value |= (buf[1]<<8) & 0xff00
-    value |= (buf[2]) & 0xff
-    if (value & 0x800000):
-        value &= 0xF000000
-   
+        # Get value
+        adc.wait_drdy(DRDY_PIN)
+
+        GPIO.output(CS_PIN, GPIO.LOW)
+        SPI.writebytes([adc.CMD['RDATA']])
+        buf = SPI.readbytes(3)
+        GPIO.output(CS_PIN, GPIO.HIGH)
+        value = (buf[0]<<16) & 0xff0000
+        value |= (buf[1]<<8) & 0xff00
+        value |= (buf[2]) & 0xff
+        if (value & 0x800000):
+            value &= 0xF000000
+        tempvalues[c-1,0] = value
     # Save value
-    data[s,:] = [time.time_ns(),value*5.0/0x7fffff]
+    data[s,0] = time.time_ns()
+    for c in range(channel_count):
+        data[s,c+1] = tempvalues[c,0]*5.0/0x7fffff
 time_stop = time.time_ns()
 
 # Saving data table
