@@ -7,8 +7,8 @@ import adc
 # Parameters
 spi_speed_mhz = 2.5 #chip default is 20 khz
 gain = adc.GAIN['1']
-sample_rate = adc.DATA_RATE['3750SPS']
-samples = 5000
+sample_rate = adc.DATA_RATE['100SPS']
+samples = 400
 channel_count = 4
 
 # Pin definition
@@ -74,9 +74,8 @@ for s in range(samples):
         SPI.writebytes([adc.CMD['WREG'] | adc.REG_DEF['MUX'], 0x00, (channel<<4) | (1<<3)])
         GPIO.output(CS_PIN, GPIO.HIGH)
 
-        # Get value
         adc.wait_drdy(DRDY_PIN)
-
+        # Get value
         GPIO.output(CS_PIN, GPIO.LOW)
         SPI.writebytes([adc.CMD['RDATA']])
         buf = SPI.readbytes(3)
@@ -86,9 +85,9 @@ for s in range(samples):
         value |= (buf[2]) & 0xff
         if (value & 0x800000):
             value &= 0xF000000
-        tempvalues[c-1,0] = value
-    # Save value
-    data[s,0] = time.time_ns()
+        tempvalues[c,0] = value
+    # Save values
+    data[s,0] = time.time_ns()-time_start
     for c in range(channel_count):
         data[s,c+1] = tempvalues[c,0]*5.0/0x7fffff
 time_stop = time.time_ns()
