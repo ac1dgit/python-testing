@@ -21,6 +21,15 @@
 >`pip install "tensorflow<2.15"`\
 >`pip install "matplotlib"`
 
+## mcc118 lib install
+# in pi terminal
+>`cd ~`\
+>`git clone https://github.com/mccdaq/daqhats.git`\
+>`cd ~/daqhats`\
+>`sudo ./install.sh`
+# in vscode
+>`pip install daqhats`
+
 ## lgpio stuff
 >`pip install spidev`\
 >`pip install rpi-lgpio`
