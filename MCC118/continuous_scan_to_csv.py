@@ -122,9 +122,6 @@ def read_and_display_data(hat, num_channels):
     total_samples_read = 0
     read_request_size = READ_ALL_AVAILABLE
 
-    basepath = '/home/pi/Documents/Measurement_Computing'
-    mypath = basepath + '/Scanning_log_files'
-
     # When doing a continuous scan, the timeout value will be ignored in the
     # call to a_in_scan_read because we will be requesting that all available
     # samples (up to the default buffer size) be returned.
@@ -147,20 +144,9 @@ def read_and_display_data(hat, num_channels):
     # to where to write the collected data as a .csv file.  Open the file
     # begin writing the data to the file.  When done, close the file.
 
-    try:
-        if os.path.exists(basepath):
-            if not (os.path.exists(mypath)):
-                os.mkdir(mypath)
-        else:
-            os.mkdir(basepath)
-            os.chdir(basepath)
-            os.mkdir(mypath)
-    except OSError as exc:
-        raise
 
-    os.chdir(mypath)
     fileDateTime = datetime.strftime(datetime.now(), "%Y_%B_%d_%H%M%S")
-    fileDateTime = mypath + "/" + fileDateTime + ".csv"
+    fileDateTime = "MCC118/logs" + "/" + fileDateTime + ".csv"
     csvfile = open(fileDateTime, "w+")
     csvwriter = csv.writer(csvfile)
 
