@@ -1,23 +1,3 @@
-#!/usr/bin/env python
-#  -*- coding: utf-8 -*-
-
-"""
-	MCC 118 Functions Demonstrated:
-		mcc118.a_in_scan_start
-		mcc118.a_in_scan_read
-		mcc118.a_in_scan_stop
-
-	Purpose:
-		Performa a finite acquisition on 1 or more channels.
-
-	Description:
-		Continuously acquires blocks of analog input data for a
-		user-specified group of channels until the acquisition is
-		stopped by the user.  The last sample of data for each channel
-		is displayed for each block of data received from the device.
-"""
-
-from __future__ import print_function
 from time import sleep
 from mcc118 import mcc118
 from hats import HatIDs, HatError, OptionFlags
@@ -25,15 +5,12 @@ from daqhats_utils import select_hat_device, enum_mask_to_string, \
     chan_list_to_mask
 from datetime import datetime
 
-import os
 import csv  # this is the import to make csv file creation simple.
-
 
 READ_ALL_AVAILABLE = -1
 
 CURSOR_BACK_2 = '\x1b[2D'
 ERASE_TO_END_OF_LINE = '\x1b[0K'
-
 
 def main():
     """
@@ -103,7 +80,6 @@ def main():
     except (HatError, ValueError) as err:
         print('\n', err)
 
-
 def read_and_display_data(hat, num_channels):
     """
     Reads data from the specified channels on the specified DAQ HAT devices,
@@ -143,7 +119,6 @@ def read_and_display_data(hat, num_channels):
     # Retrieve the Current Working Directory and generate the full path
     # to where to write the collected data as a .csv file.  Open the file
     # begin writing the data to the file.  When done, close the file.
-
 
     fileDateTime = datetime.strftime(datetime.now(), "%Y_%B_%d_%H%M%S")
     fileDateTime = "MCC118/logs" + "/" + fileDateTime + ".csv"
@@ -194,7 +169,6 @@ def read_and_display_data(hat, num_channels):
 
     print('\n')
     csvfile.close()
-
 
 if __name__ == '__main__':
     main()
