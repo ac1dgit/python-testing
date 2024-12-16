@@ -19,7 +19,8 @@
 
 from __future__ import print_function
 from time import sleep
-from daqhats import mcc118, OptionFlags, HatIDs, HatError
+from mcc118 import mcc118
+from hats import HatIDs, HatError, OptionFlags
 from daqhats_utils import select_hat_device, enum_mask_to_string, \
     chan_list_to_mask
 from datetime import datetime
