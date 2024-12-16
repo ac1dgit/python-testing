@@ -1,14 +1,11 @@
 from time import sleep
-from mcc118 import mcc118
+import mcc118
 from hats import HatIDs, HatError, OptionFlags
-from daqhats_utils import select_hat_device, enum_mask_to_string, \
-    chan_list_to_mask
-from datetime import datetime
-
-import csv  # this is the import to make csv file creation simple.
+from daqhats_utils import select_hat_device, enum_mask_to_string, chan_list_to_mask
+import datetime
+import csv
 
 READ_ALL_AVAILABLE = -1
-
 CURSOR_BACK_2 = '\x1b[2D'
 ERASE_TO_END_OF_LINE = '\x1b[0K'
 
@@ -21,7 +18,7 @@ def main():
     samples_per_channel = 0
     options = OptionFlags.CONTINUOUS
     scan_rate = 3000.0
-
+    
     try:
         # Select an MCC 118 HAT device to use.
         address = select_hat_device(HatIDs.MCC_118)
