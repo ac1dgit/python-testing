@@ -1,9 +1,10 @@
 from time import sleep
-import mcc118
+from mcc118 import mcc118
 from hats import HatIDs, HatError, OptionFlags
-from daqhats_utils import select_hat_device, enum_mask_to_string, chan_list_to_mask
-import datetime
-import csv
+from daqhats_utils import select_hat_device, enum_mask_to_string, \
+    chan_list_to_mask
+from datetime import datetime
+import csv  # this is the import to make csv file creation simple.
 
 READ_ALL_AVAILABLE = -1
 CURSOR_BACK_2 = '\x1b[2D'
@@ -114,7 +115,7 @@ def read_and_display_data(hat, num_channels):
     # begin writing the data to the file.  When done, close the file.
 
     fileDateTime = datetime.strftime(datetime.now(), "%Y_%B_%d_%H%M%S")
-    fileDateTime = "MCC118/logs" + "/" + fileDateTime + ".csv"
+    fileDateTime = "MCC118 onboard testing/logs" + "/" + fileDateTime + ".csv"
     csvfile = open(fileDateTime, "w+")
     csvwriter = csv.writer(csvfile)
 
