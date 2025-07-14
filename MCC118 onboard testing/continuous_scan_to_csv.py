@@ -13,7 +13,7 @@ ERASE_TO_END_OF_LINE = '\x1b[0K'
 def main():
     # Store the channels in a list and convert the list to a channel mask that
     # can be passed as a parameter to the MCC 118 functions.
-    channels = [0, 1]
+    channels = [0, 1, 2, 3, 4, 5, 6, 7]
     channel_mask = chan_list_to_mask(channels)
     num_channels = len(channels)
     samples_per_channel = 0
