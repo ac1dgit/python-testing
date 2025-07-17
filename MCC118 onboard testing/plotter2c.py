@@ -3,7 +3,7 @@ import csv
 import matplotlib.pyplot as plt
 
 data = []
-with open("MCC118 onboard testing/logs/2025_July_17_160503.csv") as csvfile:
+with open("MCC118 onboard testing/logs/2025_July_17_161823.csv") as csvfile:
     reader = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC) # change contents to floats
     for row in reader: # each row is a list
         data.append(row)
