@@ -18,7 +18,7 @@ def main():
     num_channels = len(channels)
     samples_per_channel = 0
     options = OptionFlags.CONTINUOUS
-    scan_rate = 3000.0
+    scan_rate = 1000.0
     
     try:
         # Select an MCC 118 HAT device to use.
