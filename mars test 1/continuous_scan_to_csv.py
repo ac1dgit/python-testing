@@ -114,9 +114,8 @@ def read_and_display_data(hat, num_channels):
     # to where to write the collected data as a .csv file.  Open the file
     # begin writing the data to the file.  When done, close the file.
 
-    # fileDateTime = datetime.strftime(datetime.now(), "%Y_%B_%d_%H%M%S")
-    fileDateTime = "full test"
-    fileDateTime = "MCC118 onboard testing/logs" + "/" + fileDateTime + ".csv"
+    fileDateTime = datetime.strftime(datetime.now(), "%Y_%B_%d_%H%M%S")
+    fileDateTime = "mars test 1/logs" + "/" + fileDateTime + ".csv"
     csvfile = open(fileDateTime, "w+")
     csvwriter = csv.writer(csvfile)
 
